@@ -1,0 +1,26 @@
+
+    body {
+      background: #F6F9FF;
+      font-family: 'Inter', sans-serif;
+    }
+    .navbar-custom {
+      background: #fff;
+      border-bottom: 1px solid #174D94;
+    }
+    .btn-report-lost {
+      background: #DAEAFF;
+      color: #174D94;
+      font-weight: 600;
+    }
+    .btn-report-found {
+      background: #174D94;
+      color: #fff;
+      font-weight: 600;
+    }
+    .card-custom {
+      border: 1px solid #174D94;
+      border-radius: 10px;
+    }
+    .card-title {
+      font-weight: 700;
+    }
