@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.inter-custom {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+body, nav {
+  background: #F6F9FF;
+  font-family: 'Inter', sans-serif !important;
+  color: #174D94; /* Apply your hex code globally */
+}
+
+* {
+  font-family: 'Inter', sans-serif !important;
+  color: #174D94; /* All text will now default to this color */
+}
+
+.login-btn {
+  background: #DAEAFF;
+  color: #174D94;
+  font-weight: 700;
+  border-radius: 10px;
+  width: 100%;
+  padding: 15px;
+  border: none;
+}
+
+.form-label,
+.forgot-subtitle,
+.cancel-link,
+.reset-subtitle {
+  font-weight: 400;
+  color: #174D94; /* Updated */
+}
+
+.forgot-link {
+  color: #707070;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.signup-link,
+.forgot-title,
+.reset-title,
+.navbar-links,
+.navbar-brand,
+.login-link {
+  color: #174D94;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.forgot-btn,
+.reset-btn,
+.btn-reset,
+.btn-signup {
+  background: #174D94;
+  color: white;
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-signup {
+  color: #DAEAFF;
+}
+
+.btn-signup:hover {
+  background-color: #123a73;
+}
+
+.resend-link {
+  font-weight: 700;
+  cursor: pointer;
+  color: #000;
+}
+
+
+/*idex code*/
+  :root {
+      --bs-primary: #174D94; /* Override Bootstrap primary color */
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #174D94; /* Apply globally */
+    }
+
+    .navbar, .navbar-nav .nav-link, .navbar-brand {
+      color: #174D94 !important;
+    }
+
+    .btn-primary,
+    .btn-outline-primary:hover {
+      background-color: #174D94 !important;
+      border-color: #174D94 !important;
+    }
+
+    .btn-outline-primary {
+      color: #174D94 !important;
+      border-color: #174D94 !important;
+    }
+
+    .btn-outline-primary:hover {
+      color: #fff !important;
+    }
+
+    a, a.text-primary, a.text-decoration-underline {
+      color: #174D94 !important;
+    }
+
+    footer {
+      background-color: #174D94;
+      color: #fff;
+    }
+
+
+    

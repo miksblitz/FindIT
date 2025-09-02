@@ -1,0 +1,37 @@
+:root {
+      --bs-primary: #174D94; /* Override Bootstrap primary color */
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #174D94; /* Apply globally */
+    }
+
+    .navbar, .navbar-nav .nav-link, .navbar-brand {
+      color: #174D94 !important;
+    }
+
+    
+    .btn-outline-primary {
+      background-color: #DAEAFF !important;
+      border-color: #DAEAFF !important;
+    }
+
+
+    .btn-primary{
+        background-color: #174D94 !important;
+        border-color: #174D94 !important;
+        color: #fff !important;
+    }
+
+   
+    
+
+    a, a.text-primary, a.text-decoration-underline {
+      color: #174D94 !important;
+    }
+
+    footer {
+      background-color: #174D94;
+      color: #fff;
+    }
