@@ -1,0 +1,72 @@
+/* =============================
+   Global Styles
+============================= */
+body, h1, h2, h3, h4, h5, h6, p, a, span, div {
+  color: #174d94 !important; /* Apply consistent text color */
+  font-family: 'Inter', sans-serif;
+}
+
+/* =============================
+   Navbar
+============================= */
+.navbar {
+  border-bottom: 2px solid #174d94 !important; /* blue line */
+  box-shadow: none !important;
+}
+
+
+.navbar-brand,
+.nav-link {
+  color: #174d94 !important;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* =============================
+   Buttons
+============================= */
+.btn-report-lost,
+.btn-report-found {
+  background-color: #174d94 !important;
+  color: #fff !important;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.btn-report-lost:hover,
+.btn-report-found:hover {
+  opacity: 0.9;
+}
+
+/* =============================
+   Cards
+============================= */
+.card-custom {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-custom:hover {
+  transform: scale(1.02);
+}
+
+.card-title {
+  color: #174d94 !important;
+}
+
+/* =============================
+   Search Bar
+============================= */
+.form-control-sm {
+  border: 1px solid #174d94;
+}
+.form-control-sm:focus {
+  border-color: #174d94;
+  box-shadow: 0 0 5px rgba(23, 77, 148, 0.5);
+}

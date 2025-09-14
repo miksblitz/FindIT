@@ -10,7 +10,7 @@
             "type": "msedge",
             "request": "launch",
             "name": "Open index.html",
-            "file": "c:\\Users\\mikel\\OneDrive\\Desktop\\Bootstrap\\index.html"
+            "file": "c:\\xampp\\htdocs\\Bootstrap\\index.html"
         }
     ]
 }
