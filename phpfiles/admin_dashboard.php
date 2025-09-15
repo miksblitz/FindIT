@@ -12,31 +12,31 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch latest approved items
-$sql = "SELECT * FROM found_items ORDER BY created_at DESC";
+// Get latest items
+$sql = "SELECT * FROM for_review ORDER BY created_at DESC";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<div class="col-md-4">';
-        echo '  <div class="card card-custom shadow-sm">';
-
+        echo '  <div class="card card-custom">';
+        
         // Header (reporter + date)
         echo '    <div class="d-flex align-items-center p-3">';
-        echo '      <img src="assets/catprofileimage.png" class="rounded-circle me-2" alt="User" width="40" height="40">';
+        echo '      <img src="assets/catprofileimage.png" class="rounded-circle me-2" alt="User">';
         echo '      <div>';
         echo '        <div class="fw-semibold">'.htmlspecialchars($row['student_name']).'</div>';
         echo '        <div class="text-muted small">'.htmlspecialchars($row['date_found']).'</div>';
         echo '      </div>';
         echo '    </div>';
-
+        
         // Item photo
-        $photoFilename = basename($row['photo']); // ensure only the filename
-        $imgPath = (!empty($row['photo']) && file_exists(__DIR__ . "/uploads/" . $photoFilename)) 
-                    ? "phpfiles/uploads/" . $photoFilename 
-                    : "assets/default-item.png";
-
-        echo '<img src="'.htmlspecialchars($imgPath).'" class="card-img-top" alt="Item Image" style="height:150px; object-fit:cover;">';
+        if (!empty($row['photo']) && file_exists("uploads/" . $row['photo'])) {
+            // adjust path because DB stores "uploads/filename.jpg"
+            echo '<img src="'.htmlspecialchars($row['photo']).'" class="card-img-top" alt="Item Image" style="height:150px; object-fit:cover;">';
+        } else {
+            echo '<img src="assets/default-item.png" class="card-img-top" alt="Default Item" style="height:150px; object-fit:cover;">';
+        }
 
         // Body (item details)
         echo '    <div class="card-body">';
@@ -49,7 +49,7 @@ if ($result && $result->num_rows > 0) {
         echo '</div>';
     }
 } else {
-    echo "<p class='text-center'>No items reported yet.</p>";
+    echo "<p>No items reported yet.</p>";
 }
 
 $conn->close();

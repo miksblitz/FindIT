@@ -30,23 +30,32 @@ $result = mysqli_stmt_get_result($stmt);
 if ($row = mysqli_fetch_assoc($result)) {
     // Verify password
     if (password_verify($password, $row['password'])) {
-        // ✅ Login success
-        $_SESSION['user_id'] = $row['id'];
-        $_SESSION['email']   = $row['email'];
+        // Save session data
+        $_SESSION['user_id']  = $row['id'];
+        $_SESSION['email']    = $row['email'];
+        $_SESSION['is_admin'] = !empty($row['is_admin']) && $row['is_admin'] == 1 ? true : false;
 
-        // Show confirmation then redirect to dashboard
-        echo "<script>
-                alert('✅ Login successful! Welcome, " . $row['email'] . "');
-                window.location.href = '../dashboard.html';
-              </script>";
+        if ($_SESSION['is_admin']) {
+            echo "<script>
+                    alert('✅ Admin login successful! Welcome, " . addslashes($row['email']) . "');
+                    window.location.href = '../admin_dashboard.html';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('✅ Login successful! Welcome, " . addslashes($row['email']) . "');
+                    window.location.href = '../dashboard.html';
+                  </script>";
+        }
         exit;
     } else {
+        // Wrong password
         echo "<script>
                 alert('❌ Invalid password.');
                 window.location.href = 'login.html';
               </script>";
     }
 } else {
+    // No user found
     echo "<script>
             alert('❌ No account found with that email.');
             window.location.href = 'login.html';

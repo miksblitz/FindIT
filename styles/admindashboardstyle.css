@@ -2,22 +2,22 @@
    Global Styles
 ============================= */
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
+  color: #174d94 !important; /* Apply consistent text color */
   font-family: 'Inter', sans-serif;
-  color: black; /* Default text color black */
 }
 
 /* =============================
    Navbar
 ============================= */
 .navbar {
-  border-bottom: 2px solid #174d94 !important;
+  border-bottom: 2px solid #174d94 !important; /* blue line */
   box-shadow: none !important;
-  background-color: #fff;
 }
+
 
 .navbar-brand,
 .nav-link {
-  color: #174d94 !important; /* Navbar links blue */
+  color: #174d94 !important;
 }
 
 .nav-link:hover {
@@ -56,10 +56,8 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
   transform: scale(1.02);
 }
 
-/* Force all texts inside cards to black */
-.card-custom *,
-.card-custom {
-  color: black !important;
+.card-title {
+  color: #174d94 !important;
 }
 
 /* =============================
@@ -67,30 +65,8 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
 ============================= */
 .form-control-sm {
   border: 1px solid #174d94;
-  color: black; /* Search input text black */
 }
-
 .form-control-sm:focus {
   border-color: #174d94;
   box-shadow: 0 0 5px rgba(23, 77, 148, 0.5);
 }
-
-/* =============================
-   Item Texts
-============================= */
-/* =============================
-   Item Texts
-============================= */
-#items-list,
-#items-list * {
-  color: black !important; /* Everything inside items-list black */
-}
-
-#items-list .card-title,
-#items-list .card-text,
-#items-list .text-muted,
-#items-list .text-primary,
-#items-list .text-secondary {
-  color: black !important; /* Override Bootstrap utility classes */
-}
-
