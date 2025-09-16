@@ -6,21 +6,29 @@ $pass = "";
 $db   = "finditdb";
 
 $conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) die("DB Connection failed: " . $conn->connect_error);
+if ($conn->connect_error) {
+    die("DB Connection failed: " . $conn->connect_error);
+}
 
-// Fetch latest approved items
+// Fetch latest found items
 $sql = "SELECT * FROM found_items ORDER BY created_at DESC";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $photoFilename = basename($row['photo']);
-        $imgPath = (!empty($row['photo']) && file_exists(__DIR__ . "/uploads/" . $photoFilename))
-                    ? "phpfiles/uploads/" . $photoFilename
-                    : "assets/default-item.png";
+        $id = (int)$row['id']; // primary key
 
+        // Handle photo
+        $photoFilename = !empty($row['photo']) ? basename($row['photo']) : "";
+        $uploadPath = __DIR__ . "/uploads/" . $photoFilename;
+
+        $imgPath = (!empty($photoFilename) && file_exists($uploadPath))
+            ? "phpfiles/uploads/" . $photoFilename
+            : "assets/default-item.png";
+
+        // Render card (NO delete button)
         echo '<div class="col-md-4">';
-        echo '  <div class="card card-custom shadow-sm">';
+        echo '  <div class="card card-custom shadow-sm mb-4" data-id="'.$id.'">';
         echo '    <div class="d-flex align-items-center p-3">';
         echo '      <img src="assets/catprofileimage.png" class="rounded-circle me-2" alt="User" width="40" height="40">';
         echo '      <div>';

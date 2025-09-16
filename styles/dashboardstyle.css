@@ -94,3 +94,15 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
   color: black !important; /* Override Bootstrap utility classes */
 }
 
+
+
+.card-select {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transform: scale(1.5);
+  display: none;
+}
+.card.edit-mode .card-select {
+  display: block;
+}
