@@ -37,7 +37,6 @@
         <ul class="navbar-nav mx-auto">
           <li class="nav-item"><a class="nav-link" href="admin_dashboard.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="admin_User_Management.html">Users</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Pickup Guidelines</a></li>
         </ul>
 
         <!-- Right Side -->
@@ -144,6 +143,305 @@
       }, 1500);
     }
   </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let editMode = false;
+  let selectedIds = new Set();
+
+  const editDeleteBtn = document.getElementById('editDeleteBtn');
+  const itemsList = document.getElementById('items-list');
+
+  if (!editDeleteBtn || !itemsList) {
+    console.warn('Missing #editDeleteBtn or #items-list in DOM.');
+    return;
+  }
+
+  // initial button label
+  editDeleteBtn.textContent = 'Edit Items';
+
+  // button click handler: enter edit mode OR perform delete
+  editDeleteBtn.addEventListener('click', () => {
+    if (!editMode) {
+      enterEditMode();
+    } else {
+      handleDelete();
+    }
+  });
+
+  // Enter edit mode: show checkboxes and reset selection
+  function enterEditMode() {
+    editMode = true;
+    selectedIds.clear();
+    updateButtonText();
+    document.querySelectorAll('.card-custom').forEach(card => card.classList.add('edit-mode'));
+    attachCheckboxHandlers(); // attach listeners to current checkboxes
+  }
+
+  // Exit edit mode: hide checkboxes and clear selections
+  function exitEditMode() {
+    editMode = false;
+    selectedIds.clear();
+    editDeleteBtn.textContent = 'Edit Items';
+    document.querySelectorAll('.card-custom').forEach(card => {
+      card.classList.remove('edit-mode');
+      const cb = card.querySelector('.card-select');
+      if (cb) cb.checked = false;
+    });
+  }
+
+  // Delete flow
+  function handleDelete() {
+    if (selectedIds.size === 0) {
+      // <-- this is the important part: show message and KEEP edit mode active
+      alert('Please select at least one item to delete.');
+      return; // do not exit edit mode
+    }
+
+    if (!confirm(`Delete ${selectedIds.size} item(s)?`)) return;
+
+    const ids = Array.from(selectedIds);
+    fetch('phpfiles/delete_items.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        alert('Items deleted successfully.');
+        exitEditMode();
+        loadItems();
+      } else {
+        alert('Error: ' + (data.error || 'Delete failed'));
+      }
+    })
+    .catch(err => alert('Request failed: ' + err));
+  }
+
+  // Update selection from checkbox events
+  function updateSelection(id, checked) {
+    if (!id) return;
+    if (checked) selectedIds.add(String(id));
+    else selectedIds.delete(String(id));
+    updateButtonText();
+  }
+
+  // Update button label to show number of selected items when in edit mode
+  function updateButtonText() {
+    if (!editMode) {
+      editDeleteBtn.textContent = 'Edit Items';
+      return;
+    }
+    const n = selectedIds.size;
+    editDeleteBtn.textContent = n > 0 ? `Delete Items (${n})` : 'Delete Items';
+  }
+
+  // Attach change listeners to all .card-select checkboxes (replaces old listeners safely)
+  function attachCheckboxHandlers() {
+    document.querySelectorAll('.card-select').forEach(cb => {
+      // replace with a fresh node to avoid duplicate handlers
+      const newCb = cb.cloneNode(true);
+      cb.parentNode.replaceChild(newCb, cb);
+
+      // try to find an id for this checkbox:
+      const id = getIdFromCheckbox(newCb);
+      // initialize checked state if it was previously selected
+      newCb.checked = selectedIds.has(String(id));
+
+      newCb.addEventListener('change', (e) => {
+        updateSelection(id, e.target.checked);
+      });
+    });
+  }
+
+  // Helper: try several places for an id (checkbox data-id, card data-id, value, id attribute)
+  function getIdFromCheckbox(cb) {
+    return cb.dataset.id
+      || cb.getAttribute('data-id')
+      || (cb.closest('.card-custom') && cb.closest('.card-custom').dataset.id)
+      || cb.value
+      || cb.id
+      || null;
+  }
+
+  // Fetch and (re)render items, then re-attach checkbox handlers
+  function loadItems() {
+    fetch('phpfiles/get_approved_items.php')
+      .then(res => res.text())
+      .then(html => {
+        itemsList.innerHTML = html;
+        attachCheckboxHandlers();
+        // keep edit-mode visuals if user was already in edit mode
+        if (editMode) {
+          document.querySelectorAll('.card-custom').forEach(card => card.classList.add('edit-mode'));
+        }
+      })
+      .catch(err => console.error('Failed to load items:', err));
+  }
+
+  // Expose updateSelection globally only if your PHP uses inline onclick="updateSelection(...)".
+  // If you prefer event listeners (recommended) you can omit this line.
+  window.updateSelection = updateSelection;
+
+  // initial load
+  loadItems();
+});
+</script>
+
+
+<!-- Search and Filter -->
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let editMode = false;
+  let selectedIds = new Set();
+
+  const editDeleteBtn = document.getElementById('editDeleteBtn');
+  const itemsList = document.getElementById('items-list');
+  const searchInput = document.querySelector('input[placeholder="Search Lost Items"]');
+
+  if (!editDeleteBtn || !itemsList) {
+    console.warn('Missing #editDeleteBtn or #items-list in DOM.');
+    return;
+  }
+
+  // initial button label
+  editDeleteBtn.textContent = 'Edit Items';
+
+  // button click handler: enter edit mode OR perform delete
+  editDeleteBtn.addEventListener('click', () => {
+    if (!editMode) {
+      enterEditMode();
+    } else {
+      handleDelete();
+    }
+  });
+
+  // Enter edit mode: show checkboxes and reset selection
+  function enterEditMode() {
+    editMode = true;
+    selectedIds.clear();
+    updateButtonText();
+    document.querySelectorAll('.card-custom').forEach(card => card.classList.add('edit-mode'));
+    attachCheckboxHandlers(); // attach listeners to current checkboxes
+  }
+
+  // Exit edit mode
+  function exitEditMode() {
+    editMode = false;
+    selectedIds.clear();
+    editDeleteBtn.textContent = 'Edit Items';
+    document.querySelectorAll('.card-custom').forEach(card => {
+      card.classList.remove('edit-mode');
+      const cb = card.querySelector('.card-select');
+      if (cb) cb.checked = false;
+    });
+  }
+
+  // Delete flow
+  function handleDelete() {
+    if (selectedIds.size === 0) {
+      alert('Please select at least one item to delete.');
+      return;
+    }
+    if (!confirm(`Delete ${selectedIds.size} item(s)?`)) return;
+
+    const ids = Array.from(selectedIds);
+    fetch('phpfiles/delete_items.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        alert('Items deleted successfully.');
+        exitEditMode();
+        loadItems();
+      } else {
+        alert('Error: ' + (data.error || 'Delete failed'));
+      }
+    })
+    .catch(err => alert('Request failed: ' + err));
+  }
+
+  // Update selection
+  function updateSelection(id, checked) {
+    if (!id) return;
+    if (checked) selectedIds.add(String(id));
+    else selectedIds.delete(String(id));
+    updateButtonText();
+  }
+
+  function updateButtonText() {
+    if (!editMode) {
+      editDeleteBtn.textContent = 'Edit Items';
+      return;
+    }
+    const n = selectedIds.size;
+    editDeleteBtn.textContent = n > 0 ? `Delete Items (${n})` : 'Delete Items';
+  }
+
+  // Attach checkbox handlers
+  function attachCheckboxHandlers() {
+    document.querySelectorAll('.card-select').forEach(cb => {
+      const newCb = cb.cloneNode(true);
+      cb.parentNode.replaceChild(newCb, cb);
+      const id = getIdFromCheckbox(newCb);
+      newCb.checked = selectedIds.has(String(id));
+      newCb.addEventListener('change', (e) => updateSelection(id, e.target.checked));
+    });
+  }
+
+  function getIdFromCheckbox(cb) {
+    return cb.dataset.id
+      || cb.getAttribute('data-id')
+      || (cb.closest('.card-custom') && cb.closest('.card-custom').dataset.id)
+      || cb.value
+      || cb.id
+      || null;
+  }
+
+  // Load items dynamically
+  function loadItems() {
+    fetch('phpfiles/get_approved_items.php')
+      .then(res => res.text())
+      .then(html => {
+        itemsList.innerHTML = html;
+        attachCheckboxHandlers();
+        if (editMode) {
+          document.querySelectorAll('.card-custom').forEach(card => card.classList.add('edit-mode'));
+        }
+        applySearchFilter(); // re-apply filter after reload
+      })
+      .catch(err => console.error('Failed to load items:', err));
+  }
+
+  // Search filter
+  function applySearchFilter() {
+    const query = searchInput.value.trim().toLowerCase();
+    document.querySelectorAll('#items-list .card-custom').forEach(card => {
+      const titleElem = card.querySelector('.card-title'); // adjust if your title has different class
+      const title = titleElem ? titleElem.textContent.toLowerCase() : '';
+      card.style.display = title.includes(query) ? '' : 'none';
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', applySearchFilter);
+  }
+
+  window.updateSelection = updateSelection;
+
+  // initial load
+  loadItems();
+});
+</script>
+
+
+
+
 
 </body>
 </html>

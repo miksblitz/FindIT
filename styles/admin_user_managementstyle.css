@@ -269,4 +269,12 @@ body {
     gap: 10px;
     padding: 20px;
   }
+
+  .access-text {
+  margin-left: -30px; /* adjust this value until it looks aligned */
+  min-width: 80px;    /* keeps the width consistent so others don't shift */
+  text-align: left;   /* makes sure text aligns left inside its box */
+}
+
+
 }

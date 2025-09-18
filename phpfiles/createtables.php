@@ -23,7 +23,7 @@ if (mysqli_query($conn, $sql_db)) {
 // Select the database
 mysqli_select_db($conn, $db_name);
 
-// Create users table
+// Create users table with role column
 $sql_table = "CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -31,6 +31,7 @@ $sql_table = "CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(50) NOT NULL,
     student_id VARCHAR(20) NOT NULL,
     password VARCHAR(255) NOT NULL,
+    role ENUM('Participant','Admin') NOT NULL DEFAULT 'Participant',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 
